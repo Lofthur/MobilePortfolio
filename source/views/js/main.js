@@ -422,6 +422,10 @@ var resizePizzas = function(size) {
 	changeSliderLabel(size);
 
 	// Iterates through pizza elements on the page and changes their widths
+	// Took the suzeSwitcer function out of the determineDx funtion, and deleted the determineDx function.
+	//Set up the changePizzaSizes funtion. This function takes the size variable that comes from the slider,
+	//and use that value in the switch. The number that gets created in the switch is sendt down to the for loop.
+	//The pizzaelements that are called in the loop gets a new dimension on it's width that is a % value.
 	function changePizzaSizes(size) {
 
 		switch(size) {
@@ -457,8 +461,9 @@ var resizePizzas = function(size) {
 window.performance.mark("mark_start_generating"); // collect timing data
 
 // This for-loop actually creates and appends all of the pizzas when the page loads
+// Setting the pizzaDiv variable imporves loading performance.
+var pizzasDiv = document.getElementById("randomPizzas");
 for (var i = 2; i < 100; i++) {
-	var pizzasDiv = document.getElementById("randomPizzas");
 	pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -494,17 +499,19 @@ function updatePositions() {
 
 	//Took the element that created forced layout outside of the for loop.
 	var sTop = document.body.scrollTop;
-	//instead of using a modulo operator i created a value variable
-	//that has values form 0 to 4. This does the same thing as
-	//the i % 5 modulo operator. When the value is greater than 4
-	//it's value is set back to 0.
-	var moveValue = 0;
+
+	//Crate a phase array that holds the five different phase values
+	var phase = [];
+	//this for loop creates and fills the pahse array with the
+	//different values.
+	for (var i = 0; i < 5; i++) {
+		phase.push(Math.sin(sTop / 1250 + i) * 100);
+	}
+	//This for loop uses the values values from the phase array
+	//to set the new .style.left value. The modulo is just used to
+	//get a value from 0 to 4, that is the length of the phase array.
 	for (var i = 0; i < items.length; i++) {
-		var phase = Math.sin((sTop / 1250) + (moveValue));
-		items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-		moveValue++;
-		if(moveValue > 4)
-			moveValue = 0;
+		items[i].style.left = items[i].basicLeft + phase[i%5] + 'px';
 	}
 
 	// User Timing API to the rescue again. Seriously, it's worth learning.
@@ -521,11 +528,11 @@ function updatePositions() {
 window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
-//Changed number of pregenterated pizzas from 200 to 20.
+//Changed number of pregenterated pizzas from 200 to 40.
 document.addEventListener('DOMContentLoaded', function() {
 	var cols = 8;
 	var s = 256;
-	for (var i = 0; i < 20; i++) {
+	for (var i = 0; i < 40; i++) {
 		var elem = document.createElement('img');
 		elem.className = 'mover';
 		elem.src = "images/pizza.png";

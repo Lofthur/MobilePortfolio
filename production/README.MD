@@ -12,10 +12,11 @@ This is in line 528 in main.js.
 I took the element that created a forced layout out of the for loop.
 This is in line 496 in main.js.
 
-Instead of the modulo operator for each pizza when the site scrolls,
-I created a moveValue that goes from 0 to 4. When the value is greater
-than four it gets reset to 0.
-This is in line 501 to 508 in main.js
+In the updatePositions() i created two for loops. One to insert the five
+different phase values that is requires, and one that changes the position
+to the items[i].style.left value. In it it has a modulo operator that
+cycles thru the phase array. Lines 494 to 515.
+This hint was given to me by the reviewer MarioNuevo.
 
 In line 493 and 441 i changed the document.querySelectorAll() to
 document.getElementByClassName().
